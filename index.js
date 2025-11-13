@@ -111,6 +111,30 @@ async function run() {
     });
 
    
+    app.patch("/habits/complete/:id", async (req, res) => {
+  const id = req.params.id;
+  const today = new Date().toISOString().split("T")[0]; 
+
+  const query = { _id: new ObjectId(id) };
+
+  const habit = await habitsCollection.findOne(query);
+
+  if (!habit) {
+    return res.status(404).send({ message: "Habit not found" });
+  }
+  const history = habit.completionHistory || [];
+  if (history.includes(today)) {
+    return res.send({ message: "Already marked complete for today" });
+  }
+
+  const update = {
+    $push: { completionHistory: today },
+  };
+
+  const result = await habitsCollection.updateOne(query, update);
+  res.send(result);
+});
+
 
     
     app.get("/myHabits", async (req, res) => {
