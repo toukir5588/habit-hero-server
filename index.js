@@ -34,7 +34,6 @@ async function run() {
     // const db = client.db("smart_db");
     const db = client.db("habit_db");
     const habitsCollection = db.collection("habits");
-    const bidsCollection = db.collection("bids");
     const usersCollection = db.collection("users");
 
     // USERS APIs
